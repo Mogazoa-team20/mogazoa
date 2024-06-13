@@ -1,0 +1,64 @@
+@import "@/styles/_index";
+
+.default {
+  width: 15rem;
+  height: 15rem;
+}
+
+.layout {
+  position: relative;
+  display: flex;
+  justify-content: center;
+}
+
+.uploadButton {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  cursor: pointer;
+  background: $gray-300;
+  border: none;
+  opacity: 0;
+  transition:
+    opacity 1s ease,
+    background 1s ease,
+    transform 1s ease;
+
+  @include rounded-xl;
+}
+
+.uploadText {
+  margin-top: 1.2rem;
+  font-size: 1.2rem;
+  color: $white-100;
+}
+
+.noneImage {
+  opacity: 1;
+}
+
+.prodcutImage {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 1;
+  transition:
+    opacity 1s ease,
+    transform 1s ease;
+
+  @include rounded-xl;
+}
+
+.layout:hover {
+  .uploadButton {
+    background: $gray-100;
+    opacity: 1;
+    transform: scale(1.05);
+  }
+
+  .prodcutImage {
+    opacity: 0;
+    transform: scale(1.05);
+  }
+}
