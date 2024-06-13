@@ -6,10 +6,12 @@ export default class HttpClient {
   }
 
   private async sendRequest<T, U>(path: string, method: string, body?: U, options: RequestInit = {}): Promise<T> {
+    const hasContentType = options?.headers && "Content-Type" in options.headers;
+    const headers = hasContentType ? options.headers : { "Content-Type": "application/json", ...options.headers };
     try {
       const requestOptions: RequestInit = {
         method,
-        headers: { "Content-Type": "application/json", ...options.headers },
+        headers,
         ...options,
       };
       if (body) {
