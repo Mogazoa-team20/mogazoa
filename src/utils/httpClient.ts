@@ -30,11 +30,11 @@ export default class HttpClient {
     return this.sendRequest<T, never>(path, "GET", undefined, options);
   }
 
-  async post<T, U>(path: string, body: U, options: RequestInit = {}): Promise<T> {
+  async post<T, U>(path: string, options: RequestInit = {}, body?: U): Promise<T> {
     return this.sendRequest<T, U>(path, "POST", body, options);
   }
 
-  async put<T, U>(path: string, body: U, options: RequestInit = {}): Promise<T> {
+  async put<T, U>(path: string, options: RequestInit = {}, body?: U): Promise<T> {
     return this.sendRequest<T, U>(path, "PUT", body, options);
   }
 
