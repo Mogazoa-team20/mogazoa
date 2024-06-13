@@ -62,7 +62,7 @@ export default function UploadImage<T extends FieldValues>({
             src={image}
             width={200}
             height={200}
-            alt='product'
+            alt='shop'
           />
         )}
         <button
