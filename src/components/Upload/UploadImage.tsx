@@ -1,6 +1,15 @@
 import Image from "next/image";
 import { useRef, useState } from "react";
-import { UseFormRegister, UseFormSetValue, FieldValues, Path, PathValue } from "react-hook-form";
+import {
+  UseFormRegister,
+  UseFormSetValue,
+  FieldValues,
+  Path,
+  PathValue,
+  FieldErrors,
+  RegisterOptions,
+  UseFormTrigger,
+} from "react-hook-form";
 import cn from "@/utils/classNames";
 import { PHOTO_ICON } from "@/utils/constant";
 import CropperModal from "./Cropper/CropperModal";
@@ -11,14 +20,22 @@ type UploadImageProps<T extends FieldValues> = {
   className?: string;
   register: UseFormRegister<T>;
   setValue: UseFormSetValue<T>;
-};
+  trigger: UseFormTrigger<T>;
+  rules?: RegisterOptions;
+  errors?: FieldErrors<T>;
+} & React.InputHTMLAttributes<HTMLInputElement>;
 
 export default function UploadImage<T extends FieldValues>({
   name,
   className = styles.default,
   register,
   setValue,
+  trigger,
+  rules,
+  errors,
+  ...rest
 }: UploadImageProps<T>) {
+  const error = errors?.[name];
   const [showModal, setShowModal] = useState(false);
   const [image, setImage] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
@@ -42,6 +59,7 @@ export default function UploadImage<T extends FieldValues>({
   const onCrop = async (croppedImage: Blob) => {
     setImage(URL.createObjectURL(croppedImage));
     setValue(name, croppedImage as PathValue<T, Path<T>>);
+    trigger(name);
     setShowModal(false);
   };
 
@@ -58,7 +76,7 @@ export default function UploadImage<T extends FieldValues>({
           />
         )}
         <button
-          className={cn(styles.uploadButton, !image && styles.noneImage)}
+          className={cn(styles.uploadButton, !image && styles.noneImage, error && styles.error)}
           type='button'
           onClick={handleUploadButtonClick}
         >
@@ -66,10 +84,9 @@ export default function UploadImage<T extends FieldValues>({
             className={styles.uploadInput}
             type='file'
             accept='image/*'
-            ref={(event) => {
-              register(name).ref(event);
-              fileInputRef.current = event;
-            }}
+            {...register(name, rules)}
+            {...rest}
+            ref={fileInputRef}
             onChange={handleImageChange}
           />
           <Image
@@ -87,6 +104,7 @@ export default function UploadImage<T extends FieldValues>({
             onCrop={onCrop}
           />
         )}
+        {error && <span className={styles.errorMessage}>{error.message as string}</span>}
       </div>
     </>
   );
