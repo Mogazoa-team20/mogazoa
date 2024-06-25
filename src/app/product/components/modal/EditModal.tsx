@@ -56,7 +56,7 @@ export default function EditModal({ productDetail, session }: ModalProps) {
   }));
 
   const onSubmit: SubmitHandler<FormValues> = async (data) => {
-    const url = data.image?.size ? await uploadImageMutation.mutateAsync(data.image) : image;
+    const url = data.croppedImage?.size ? await uploadImageMutation.mutateAsync(data.croppedImage) : image;
     const productData = {
       name: data.productName,
       description: data.description,
